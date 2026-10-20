@@ -1,0 +1,138 @@
+/* ================= ADMIN PAGE LAYOUT ================= */
+
+.admin-page {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* HEADER */
+.admin-header {
+    margin-bottom: 32px;
+}
+
+.breadcrumb {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.breadcrumb:hover {
+    color: var(--accent);
+}
+
+.admin-title {
+    margin-top: 16px;
+}
+
+.kicker {
+    font-size: 12px;
+    letter-spacing: .12em;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.admin-title h1 {
+    margin: 8px 0;
+    font-size: 32px;
+}
+
+.admin-title p {
+    color: var(--muted);
+    margin: 0;
+}
+
+/* ================= FORM GRID ================= */
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* 2-column layout */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+/* each column */
+.form-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* panels */
+.panel {
+    border: 1px solid var(--line);
+    /* border-radius: 12px; */
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+}
+
+.panel legend {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+}
+
+/* fields */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.field label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.field input,
+.field select,
+.field textarea {
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    /* border-radius: 8px; */
+    background: var(--panel);
+    color: var(--text);
+    font-size: 14px;
+}
+
+/* textarea */
+textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+/* ACTIONS */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* tablet + mobile */
+@media (max-width: 64em) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,43 @@
+.modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    /* margin: 1em 0.8em; */
+}
+
+.modal__head {
+    display: flex;
+    justify-content: center;
+    margin: 1em 0.8em;
+}
+
+.modal__foot {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal__foot form {
+    display: flex;
+    width: auto;
+}
+
+.modal__backdrop {
+    /* position: absolute; */
+    /* inset: 0; */
+    background:rgba(0, 0, 0, 0.4);
+}
+
+.modal__panel {
+    position: relative;
+    width: min(420px, 90vw);
+    background:#b9aeae;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.39);
+    overflow: hidden;
+    /* padding: 1em 2em; */
+
+}

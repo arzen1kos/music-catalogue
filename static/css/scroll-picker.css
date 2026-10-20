@@ -1,0 +1,54 @@
+
+#scroll-picker {
+    display: flex;
+    justify-content: center;
+
+    perspective: 1000px;
+}
+
+#scroll-picker li {
+    list-style: none;
+
+    width: 100px;
+    height: 220px;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+}
+
+#scroll-picker button {
+    background: transparent;
+    border: none;
+
+    color: white;
+
+    padding: 0.5rem;
+
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+#scroll-picker button.selected {
+    font-size: 1.8rem;
+    font-weight: bold;
+
+    transform: scale(1.2);
+
+    color: var(--accent);
+}
+
+#scroll-picker button.faded {
+    opacity: 0.35;
+    transform: scale(0.8);
+}
