@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Add Album | Music Collectors Catalogue {% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/add-album.css' %}">
+<link rel="stylesheet" href="{% static 'css/scroll-picker.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <!-- Header -->
+    <div class="admin-header">
+        <a href="{% url 'albums' %}" class="breadcrumb">← Back to Albums</a>
+    </div>
+
+    {% if submitted %}
+        <div class="success">
+            <div class="success-box">
+                <div class="success-icon">✓</div>
+                <h2>Album Added</h2>
+                <a class="btn btn--primary" href="{% url 'albums' %}">Back</a>
+            </div>
+        </div>
+    {% else %}
+    <div class="admin-title">
+        <div class="kicker">ADMIN PANEL</div>
+        <h1>Add Album</h1>
+        <p>Fill in the details to add a new album to the catalogue.</p>
+    </div>
+    <form class="admin-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-grid">
+
+            <!-- LEFT COLUMN -->
+            <div class="form-col">
+
+                <fieldset class="panel">
+                    <legend>Album Info</legend>
+
+                    <div class="field">
+                        <label>Album Title</label>
+                        {{ form.title }}
+                    </div>
+
+                    <div class="field">
+                        <label>Artist</label>
+                        {{ form.artist }}
+                    </div>
+
+                    <div class="field">
+                        {% comment %} <label>Release Year</label> {% endcomment %}
+                        {% comment %} {{ form.release_year }} {% endcomment %}
+                        <div class="form__group">
+                            <label for "release_year">Release Year</label>
+                            
+                            <!-- Hidden actual Django field -->
+                            {{ form.release_year.as_hidden }}
+                        
+                            <!-- Custom Picker -->
+                            <ul id="scroll-picker">
+                                <li class="year"></li>
+                            </ul>
+                        
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="panel">
+                    <legend>Production</legend>
+
+                    <div class="field">
+                        <label>Producer</label>
+                        {{ form.producer_name }}
+                    </div>
+
+                    <div class="field">
+                        <label>Record Label</label>
+                        {{ form.record_label }}
+                    </div>
+                </fieldset>
+
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="form-col">
+
+                <fieldset class="panel">
+                    <legend>Classification</legend>
+
+                    <div class="field">
+                        <label>Genre</label>
+                        {{ form.genre }}
+                    </div>
+                </fieldset>
+
+                <fieldset class="panel">
+                    <legend>Media</legend>
+
+                    <div class="field">
+                        <label>Album Cover</label>
+                        {{ form.cover_image }}
+                    </div>
+                </fieldset>
+
+                <fieldset class="panel panel--full">
+                    <legend>Notes</legend>
+
+                    <div class="field">
+                        {{ form.comment }}
+                    </div>
+                </fieldset>
+
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+            <a href="{% url 'albums' %}" class="btn btn--ghost">Cancel</a>
+            <button type="submit" class="btn btn--primary">Save Album</button>
+        </div>
+
+    </form>
+
+    {% endif %}
+</div>
+{% endblock %}

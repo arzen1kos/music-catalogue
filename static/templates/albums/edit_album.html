@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Edit Album | Music Collectors Catalogue {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/scroll-picker.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="form-page">
+    <div class="form-page__header">
+        <a href="{% url 'album-details' album.id %}" class="breadcrumb">← Back to Album</a>
+    </div>
+
+    <div class="form-container">
+        <div class="form-header">
+            <div class="kicker">ADMIN</div>
+            <h1>Edit Album</h1>
+            <p class="form-header__subtitle">{{ album.title }}</p>
+        </div>
+
+        <form class="form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <fieldset class="form__fieldset">
+                <legend>Album Information</legend>
+                {{ form.title }}
+                {{ form.artist }}
+                <label for "release_year">Release Year</label>
+                {{ form.release_year.as_hidden }}
+            
+                <ul id="scroll-picker">
+                    <li class="year"></li>
+                </ul>
+            </fieldset>
+
+            <fieldset class="form__fieldset">
+                <legend>Production Details</legend>
+                {{ form.producer_name }}
+                {{ form.record_label }}
+            </fieldset>
+
+            <fieldset class="form__fieldset">
+                <legend>Classification</legend>
+                {{ form.genre }}
+            </fieldset>
+
+            <fieldset class="form__fieldset">
+                <legend>Media</legend>
+                {{ form.cover_image }}
+            </fieldset>
+
+            <fieldset class="form__fieldset">
+                <legend>Notes (Optional)</legend>
+                {{ form.comment }}
+            </fieldset>
+
+            <div class="form__actions">
+                <a href="{% url 'album-details' album.id %}" class="btn btn--ghost">Cancel</a>
+                <button type="submit" class="btn btn--primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-page {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .form-page__header {
+        margin-bottom: 40px;
+    }
+
+    .breadcrumb {
+        font-size: 14px;
+        color: var(--muted);
+        font-weight: 600;
+        transition: color 0.2s ease;
+    }
+
+    .breadcrumb:hover {
+        color: var(--accent);
+    }
+
+    .form-container {
+        border: 1px solid var(--line);
+        {% comment %} border-radius: var(--radius-sm); {% endcomment %}
+        padding: 40px;
+        background: linear-gradient(180deg, var(--glass-05), var(--glass-02));
+    }
+
+    .form-header {
+        margin-bottom: 40px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .kicker {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 12px;
+    }
+
+    .form-header h1 {
+        margin: 0 0 12px;
+        font-size: 32px;
+        font-weight: 900;
+    }
+
+    .form-header__subtitle {
+        margin: 0;
+        font-size: 16px;
+        color: var(--muted);
+    }
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .form__fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .form__fieldset legend {
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 8px;
+        padding: 0;
+    }
+
+    /* Form controls */
+    .form p {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin: 0;
+    }
+
+    .form label {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .form input[type="text"],
+    .form input[type="date"],
+    .form input[type="email"],
+    .form input[type="number"],
+    .form select,
+    .form textarea {
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        {% comment %} border-radius: 8px; {% endcomment %}
+        background: var(--panel);
+        color: var(--text);
+        font-family: inherit;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+
+    .form input[type="text"]:focus,
+    .form input[type="date"]:focus,
+    .form input[type="email"]:focus,
+    .form input[type="number"]:focus,
+    .form select:focus,
+    .form textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px var(--ring-2);
+    }
+
+    .form textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form input[type="file"] {
+        color: var(--muted);
+    }
+
+    .form input[type="file"]::file-selector-button {
+        padding: 8px 12px;
+        margin-right: 12px;
+        border: 1px solid var(--line);
+        {% comment %} border-radius: 6px; {% endcomment %}
+        background: var(--panel);
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .form input[type="file"]::file-selector-button:hover {
+        background: var(--panel-2);
+        border-color: var(--accent);
+    }
+
+    .form__actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .form-container {
+            padding: 24px;
+        }
+
+        .form-header h1 {
+            font-size: 24px;
+        }
+
+        .form__actions {
+            flex-direction: column;
+        }
+
+        .form__actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Music Collectors Catalogue {% endblock %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block content %}
+    <div class="heroSubP">
+        <p>Music Collectors'</p>
+    </div>
+    <div class="hero">
+        <div class="heroT">
+        <h2>Catalogue</h2>
+        </div>
+        <p class="heroP">
+            Browse albums and artists.
+        </p>
+    </div>
+    <div class="home-hero">
+        <img
+            class="home-hero__img"
+            src="{% static 'images/vinyl-hero.png' %}"
+            alt="Vinyl record"
+        >
+    </div>
+    <div class="hero-spacer"></div>
+    <style>
+        {% comment %} @import url('https://fonts.cdnfonts.com/css/hubot-sans'); {% endcomment %}
+        *{ box-sizing: border-box; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; scroll-behavior: smooth;}
+        html, body { height: 100%; }
+
+        html::-webkit-scrollbar { display: none; }
+        html { -ms-overflow-style: none; scrollbar-width: none; }
+
+        h2 {
+            font-family: 'Hubot-Sans', sans-serif;
+        }
+        h2, p {
+            margin: 0; padding: 0;
+        }
+        h2 a {
+            text-decoration: none;
+            color: unset;
+        }
+        @keyframes colorize {
+            0%{filter: hue-rotate(0deg); }
+            100% {filter: hue-rotate(-380deg);}
+        }
+
+        @keyframes btn-rot {
+            0% { rotate: 0deg; }
+            100% { rotate: 360deg; }
+        }
+
+        p {
+            font-size: 1.5em;
+        }
+
+        .hero {
+            width: 100%;
+            height: 100%;
+            max-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2em;
+            {% comment %} justify-content: space-around; {% endcomment %}
+
+        }
+
+
+        .heroT {
+            position: absolute; left: 0; top: 12em; right: 0; margin: auto;
+            height: 20em;
+            padding-top: 2em;
+            translate: 0 -1.6em;
+            opacity: 0;
+            animation: load 2s ease-in-out 0.6s forwards;
+        }
+        @keyframes load {
+            0% { opacity: 0;}
+            100% { opacity: 1;}
+        }
+        .heroT > h2 {
+            position: absolute;left: 0; right: 0; margin: auto;
+            width: fit-content;
+
+            font-size: 7em;
+            font-weight: 600;
+            color: #ff9b9b;
+            background:
+            radial-gradient(
+                    2em 2em at 50% 50%,
+                    transparent calc(var(--p) - 2em),
+                    #ffe0e0 calc(var(--p) - 1em),
+                    #ffe0e0 calc(var(--p) - 0.4em),
+                    transparent var(--p)
+                ),
+                linear-gradient(
+                    0deg,
+                    #2a0000 15%,
+                    #7a0000 55%,
+                    #ff3c3c 100%
+                );
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                text-shadow: 0 2px 16px #250101;
+            --p:0%;
+            transition:--p 3s linear;
+
+            animation: pulse 10s linear 1.2s infinite;
+        }
+
+        .heroT h2:nth-child(2) {
+            background:
+            radial-gradient( 2em 2em at 50% 50%,
+                transparent calc(var(--p) - 2em),
+                transparent calc(var(--p) - 1em),
+                #fff calc(var(--p) - 1em),
+                #fff calc(var(--p) - 0.4em),
+                transparent calc(var(--p) - 0.4em),
+                transparent var(--p)
+            );
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: blur(16px) opacity(0.4);
+        }
+        @keyframes pulse {
+            0% { --p:0%; }
+            50% { --p:300%;}
+            100% { --p:300%;}
+        }
+        @property --p {
+            syntax: '<percentage>';
+            inherits: false;
+            initial-value: 0%;
+        }
+
+        .heroP {
+            font-size: 1.2em;
+            position: absolute; left: 0; right: 0; top: 18em; margin: auto;
+            height: fit-content; width: fit-content; text-align: center;
+            opacity: 0;
+            translate: 0 1em;
+            animation: load 2s ease-out 2s forwards, up 1.4s ease-out 2s forwards;
+            color: #d8ecf8;
+            text-shadow: 0 2px 16pxrgba(37, 1, 1, 0.14);
+            background: linear-gradient(0deg, #d8ecf8 0, #98c0ef 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        @keyframes up {
+            100% { translate: 0; }
+        }
+
+        .heroSubP {
+            position: absolute; left: 0; right: 0; top: 10em; margin: auto;
+            height: fit-content;
+            opacity: 0;
+            translate: 0 -1em;
+            animation: load3 2s ease-in 0s forwards, up 1.4s ease-out 0s forwards;
+        }
+        @keyframes load3 {
+            0% { opacity: 0;}
+            100% { opacity: 0.7;}
+        }
+        .heroSubP p {
+            font-size: 1em;
+            position: relative; width: fit-content; margin: auto;
+            color: #250101;
+            text-shadow: 0 2px 16px #250101;
+            background: linear-gradient(0deg,rgb(44, 29, 29) 0,#120101 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .heroSubP p::before,
+        .heroSubP p::after {
+            position: absolute; top: 60%;
+            display: block; content: '';
+            width: 5em; height: 1px;
+            opacity: 0;
+            animation: load2 1.4s ease-in-out 0s forwards, up 1.4s ease-out 0s forwards;
+        }
+        @keyframes load2 {
+            0% { opacity: 0;}
+            100% { opacity: 0.3;}
+        }
+        .heroSubP p::before{
+            background: linear-gradient( -90deg, #120101 0%, transparent 100%);
+            right: 120%;
+            translate: -5em 0;
+        }
+        .heroSubP p::after {
+            background: linear-gradient( 90deg, #120101 0%, transparent 100%);
+            left: 120%;
+            translate: 5em 0;
+        }
+        .home-hero {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 21em;
+            margin: auto;
+
+            width: min(40em, 80vw);
+            height: auto;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+
+            animation:
+                vinylEnter 1.6s ease-out 0.4s forwards,
+                vinylFloat 6s ease-in-out 2s infinite;
+            will-change: transform, opacity;
+            filter: drop-shadow(0 20px 60px rgba(0,0,0,0.45));
+        }
+
+        @keyframes vinylFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .home-hero img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* entrance animation */
+        @keyframes vinylEnter {
+            0% {
+                opacity: 0;
+                transform: translateY(60px) scale(0.96);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(-8px) scale(1.01);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0px) scale(1);
+            }
+        }
+    </style>
+{% endblock %}

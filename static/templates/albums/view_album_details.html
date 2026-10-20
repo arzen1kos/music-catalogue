@@ -1,0 +1,436 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} {{ album.title }} | Music Collectors Catalogue {% endblock %}
+
+{% comment %} {% block extra_css %}<link rel="stylesheet" href="{% static 'modal.css' %}">{% endblock %} {% endcomment %}
+
+{% block content %}
+
+<div class="album-detail-header">
+    <a href="{% url 'albums' %}" class="breadcrumb">← Back to Albums</a>
+</div>
+
+<article class="album-detail">
+    <div class="album-detail__grid">
+        <!-- Cover Image -->
+        <div class="album-detail__image-section">
+            <div class="album-cover">
+                {% if album.cover_image %}
+                    <img 
+                        src="{{ album.cover_image.url }}"
+                        alt="{{ album.title }}"
+                        class="album-cover__img">
+                {% else %}
+                    <img 
+                        src="/media/album_covers/album-placeholder.png"
+                        alt="Album cover placeholder"
+                        class="album-cover__img">
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Album Info -->
+        <div class="album-detail__content">
+            <div class="album-detail__meta">
+                <div class="kicker">
+                    ALBUM
+                </div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'edit-album' album.id %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1a1209"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>
+                    </a>
+                {% endif %}
+            </div>
+            
+            <h1 class="album-detail__title">{{ album.title }}</h1>
+            
+            <div class="album-detail__artist-info">
+                <h2 class="album-detail__artist">
+                    {% if album.artist %}
+                        <a href="{% url 'artist-details' album.artist.id %}">{{ album.artist.name }}</a>
+                    {% else %}
+                        Unknown Artist
+                    {% endif %}
+                </h2>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="album-detail__specs">
+                <div class="spec">
+                    <div class="spec__label">Release Date</div>
+                    <div class="spec__value">{{ album.release_year}}</div>
+                </div>
+                <div class="spec">
+                    <div class="spec__label">Genre</div>
+                    <div class="spec__value">{{ album.genre|title }}</div>
+                </div>
+                <div class="spec">
+                    <div class="spec__label">Producer</div>
+                    <div class="spec__value">{{ album.producer_name }}</div>
+                </div>
+                <div class="spec">
+                    <div class="spec__label">Record Label</div>
+                    <div class="spec__value">{{ album.record_label }}</div>
+                </div>
+            </div>
+
+            <!-- Comments/Description -->
+            {% if album.comment %}
+            <div class="album-detail__description">
+                <h3>About This Album</h3>
+                <p>{{ album.comment }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Admin Actions -->
+            {% if user.is_authenticated %}
+            <div class="album-card__actions mt-2">
+                <div class="btn-charge btn--danger" data-duration="600">
+                    <button class="btn-label" onClick="openDeleteModal('{{ album.id }}', '{{ album.title }}')">Delete</button>
+                    <span class="btn-progress"></span>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</article>
+
+<!-- Delete Modal -->
+<div class="modal" id="deleteModal" style="display: none;">
+    <div class="modal__backdrop" onclick="closeDeleteModal()"></div>
+    <div class="modal__panel">
+        <div class="modal__head">
+            <h2 class="modal__title">Delete Album</h2>
+        </div>
+        <div class="modal__body">
+            <p>Are you sure you want to delete <strong id="albumTitle">{{album.title}}</strong>? This action cannot be undone.</p>
+        </div>
+        <div class="modal__foot">
+            <form method="post" style="display: inline;" id="deleteForm">
+                {% csrf_token %}
+                <button type="submit" class="btn btn--danger">Confirm</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .album-detail-header {
+        margin-bottom: 40px;
+    }
+
+    .breadcrumb {
+        font-size: 14px;
+        color: var(--muted);
+        font-weight: 600;
+        transition: color 0.2s ease;
+    }
+
+    .breadcrumb:hover {
+        color: var(--accent);
+    }
+
+    .kicker {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 12px;
+    }
+
+    .album-detail {
+        margin: 40px 0 80px;
+        min-height: 100vh;
+    }
+
+    .album-detail__grid {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 60px;
+        align-items: start;
+    }
+    
+    .album-detail__image-section {
+        position: sticky;
+        top: 100px;
+    }
+
+    .album-cover {
+        position: relative;
+        aspect-ratio: 1;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+        margin-bottom: 24px;
+    }
+
+    .album-cover__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .album-detail__admin-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .album-detail__title {
+        margin: 0 0 16px;
+        font-size: 48px;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+    }
+
+    .album-detail__artist {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--accent);
+    }
+
+    .album-detail__artist a {
+        color: var(--accent);
+    }
+
+    .album-detail__artist a:hover {
+        color: var(--accent-2);
+    }
+
+    .album-detail__artist-info {
+        margin-bottom: 40px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    /* Specs Grid */
+    .album-detail__specs {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px 24px;
+        margin-bottom: 40px;
+        padding-bottom: 40px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .spec {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .spec__label {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+    }
+
+    .spec__value {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .album-detail__description {
+        margin-top: 40px;
+    }
+
+    .album-detail__description h3 {
+        margin: 0 0 16px;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+
+    .album-detail__description p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.7;
+        color: var(--muted);
+    }
+
+    .btn-charge button {
+        background: none;
+        border: none;
+    }
+
+    .btn-charge:hover {
+        background: #ffffff;
+        shadow-color:rgba(57, 0, 0, 0.64);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .album-detail__grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .album-detail__image-section {
+            position: relative;
+            top: auto;
+        }
+
+        .album-detail__title {
+            font-size: 36px;
+        }
+
+        .album-detail__specs {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .album-detail__title {
+            font-size: 28px;
+        }
+
+        .album-detail__artist {
+            font-size: 20px;
+        }
+
+        .album-detail__specs {
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .album-detail__grid {
+            gap: 24px;
+        }
+    }
+    .btn-charge {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        
+        padding: 10px 14px;
+        border: 1px solid #ccc;
+        background: transparent;
+        
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        
+        cursor: pointer;
+        overflow: hidden;
+        }
+        
+        /* progress bar */
+        .btn-progress {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 2px;
+        width: 100%;
+        background:rgb(46, 6, 6);
+        
+        transform: scaleX(0);
+        transform-origin: left;
+        }
+        
+        /* hover triggers animation */
+        .btn-charge:is(:hover, :focus-visible) .btn-progress {
+        animation: charge var(--charge-dur, 600ms) linear forwards;
+        }
+        
+        /* fully charged state */
+        .btn-charge[data-ready] .btn-progress {
+        transform: scaleX(1);
+        animation: none;
+        }
+        
+        /* label stays above animation */
+        .btn-label {
+        position: relative;
+        z-index: 1;
+        }
+        
+        @keyframes charge {
+        to {
+            transform: scaleX(1);
+        }
+    }
+</style>
+
+<script>
+    let deleteAlbumId = null;
+
+    function openDeleteModal(albumId, albumTitle) {
+        document.getElementById('albumTitle').textContent = albumTitle;
+        document.getElementById('deleteForm').action = `/albums/${albumId}/delete/`;
+        document.getElementById('deleteModal').style.display = 'grid';
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    document.getElementById('deleteModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDeleteModal();
+        }
+    });
+
+    
+    /* =========================
+       FRICTION DELETE BUTTON
+    ========================== */
+
+    const deleteBtn = document.querySelector('.btn-confirm');
+
+    if (deleteBtn) {
+        const progress = deleteBtn.querySelector('.btn-progress');
+        const duration = 800;
+
+        let ready = false;
+        let chargeTimer = null;
+        let decayTimer = null;
+
+        const arm = () => {
+            ready = true;
+            deleteBtn.dataset.ready = "true";
+        };
+
+        const reset = () => {
+            ready = false;
+            deleteBtn.dataset.ready = "";
+            progress.style.transform = "scaleX(0)";
+        };
+
+        const startCharge = () => {
+            clearTimeout(chargeTimer);
+            chargeTimer = setTimeout(arm, duration);
+        };
+
+        const startDecay = () => {
+            clearTimeout(decayTimer);
+            decayTimer = setTimeout(reset, 1200);
+        };
+
+        const activate = () => {
+            if (!ready) return;
+
+            // trigger actual form submit
+            const form = document.getElementById('deleteForm');
+            if (form) form.submit();
+        };
+
+        deleteBtn.addEventListener('pointerenter', startCharge);
+        deleteBtn.addEventListener('focus', startCharge);
+
+        deleteBtn.addEventListener('pointerleave', startDecay);
+        deleteBtn.addEventListener('focusout', startDecay);
+
+        deleteBtn.addEventListener('click', activate);
+    }
+</script>
+
+{% endblock %}

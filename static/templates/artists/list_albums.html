@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} {{page_title}} | Music Collectors Catalogue {% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Albums</h1>
+        <p class="page-subtitle">{{ album_list|length }} albums in collection</p>
+    </div>
+    
+    <!-- Search form -->
+    <div class="search-filter">
+        <form method="get" class="search-form">
+            <input 
+                type="text" 
+                name="q" 
+                placeholder="Search albums..." 
+                value="{{ request.GET.q }}"
+                class="search-input">
+            <button type="submit" class="btn btn--secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="page-actions">
+        <a href="{% url 'add-album' %}" class="btn btn--primary button-54" role="button">Add Album</a>
+    </div>
+    {% endif %}
+</div>
+
+
+{% if album_list %}
+<div class="album-grid">
+    {% for album in album_list %}
+    <a href="{% url 'album-details' album.id %}" class="btn--view-details btn--sm">
+        <div class="album-card">
+            <div class="album-card__image">
+                {% if album.cover_image %}
+                    <img 
+                        src="{{ album.cover_image.url }}"
+                        alt="{{ album.title }}"
+                        class="album-card__img">
+                    {% else %}
+                    <img 
+                        src="/media/album_covers/album-placeholder.png"
+                        alt="Album cover placeholder"
+                        class="album-card__img">
+                    {% endif %}
+                    {% comment %} <div class="album-card__overlay">
+                        <a href="{% url 'album-details' album.id %}" class="btn--view-details btn--sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#D9D9D9"><path d="M200-120q-33 0-56.5-23.5T120-200v-160h80v160h160v80H200Zm400 0v-80h160v-160h80v160q0 33-23.5 56.5T760-120H600ZM120-600v-160q0-33 23.5-56.5T200-840h160v80H200v160h-80Zm640 0v-160H600v-80h160q33 0 56.5 23.5T840-760v160h-80Z"/></svg>
+                        </a>
+                    </div> {% endcomment %}
+                </div>
+                <div class="album-card__content">
+                    <h3 class="album-card__title">{{ album.title }}</h3>
+                    <p class="album-card__artist">{{ album.artist.name|default:"Unknown Artist" }}</p>
+                    <p class="album-card__meta">{{ album.genre|title }} • {{ album.release_year }}</p>
+                </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No albums found. {% if user.is_authenticated %}<a href="{% url 'add-album' %}">Add your first album</a>{% endif %}</p>
+</div>
+{% endif %}
+
+</div>
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 40px;
+        gap: 20px;
+    }
+
+    .page-title {
+        margin: 0 0 8px;
+        font-size: 40px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+    }
+
+    .page-subtitle {
+        margin: 0;
+        font-size: 14px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .page-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    input::placeholder {
+        color:#200a0a;
+    }
+
+    .search-filter {
+        margin-bottom: 40px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 12px;
+        max-width: 500px;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1px solid var(--line);
+        font-size: 0.8rem;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px var(--ring-2);
+        color:#000000;
+    }
+
+    /* Album Grid */
+    .album-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1em;
+        max-height: 115vh;
+        margin-bottom: 6em;
+        /* Makes rows consistent */
+        grid-auto-rows: 1fr;
+    }
+
+    .album-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        padding: 0.8em;
+        background: var(--panel);
+        transition: all 0.3s ease;
+    }
+
+    .album-card:hover {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px var(--ring-2), var(--shadow);
+    }
+
+    .album-card__image {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1;
+        overflow: hidden;
+        background: var(--panel-2);
+    }
+
+    .album-card__img {
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .album-card__content {
+        padding: 16px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .album-card__title {
+        margin: 0 0 6px;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    .album-card__artist {
+        margin: 0 0 6px;
+        font-size: 14px;
+        color: var(--accent);
+        font-weight: 550;
+    }
+
+    .album-card__meta {
+        margin: 0 0 12px;
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    .album-card__actions {
+        display: flex;
+        gap: 8px;
+        margin-top: auto;
+    }
+
+    .btn--sm {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+        }
+
+        .album-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1em;
+        }
+
+        .page-title {
+            font-size: 28px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .album-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .search-form {
+            flex-direction: column;
+        }
+    }
+    
+</style>
+
+{% endblock %}

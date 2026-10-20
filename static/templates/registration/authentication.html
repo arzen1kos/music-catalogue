@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %} Authentication | Music Collectors Catalogue {% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% else %}
+<p>You are not logged in</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Delete Album | Music Collectors Catalogue {% endblock %}
+
+{% block content %}
+
+<div class="delete-page">
+    <div class="delete-page__header">
+        <a href="{% url 'album-details' album.id %}" class="breadcrumb">← Back to Album</a>
+    </div>
+
+    <div class="delete-container">
+        <div class="delete-warning">
+            <div class="danger-mark">!</div>
+            <h1>Delete Album</h1>
+            <p>Are you sure you want to delete this album?</p>
+        </div>
+
+        <div class="album-preview">
+            <div class="album-preview__image">
+                {% if album.cover_image %}
+                    <img 
+                        src="{{ album.cover_image.url }}"
+                        alt="{{ album.title }}"
+                        class="album-preview__img">
+                {% else %}
+                    <img 
+                        src="/media/album-placeholder.png"
+                        alt="Album cover placeholder"
+                        class="album-preview__img">
+                {% endif %}
+            </div>
+            <div class="album-preview__info">
+                <h2>{{ album.title }}</h2>
+                <p class="artist">{{ album.artist.name }}</p>
+                <p class="meta">Released: {{ album.release_year|date:"Y" }}</p>
+            </div>
+        </div>
+
+        <div class="delete-warning__text">
+            <p>This action <strong>cannot be undone</strong>. Please make sure you want to permanently delete this album from your catalogue.</p>
+        </div>
+
+        <div class="delete-actions">
+            <a href="{% url 'album-details' album.id %}" class="btn btn--ghost">Cancel</a>
+            <form method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn--danger">Delete Album</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .delete-page {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .delete-page__header {
+        margin-bottom: 40px;
+    }
+
+    .breadcrumb {
+        font-size: 14px;
+        color: var(--muted);
+        font-weight: 600;
+        transition: color 0.2s ease;
+    }
+
+    .breadcrumb:hover {
+        color: var(--accent);
+    }
+
+    .delete-container {
+        border: 2px solid var(--danger-35);
+        {% comment %} border-radius: var(--radius-sm); {% endcomment %}
+        padding: 40px;
+        background: linear-gradient(180deg, var(--danger-05), var(--danger-02));
+    }
+
+    .delete-warning {
+        text-align: center;
+        margin-bottom: 32px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .delete-warning h1 {
+        margin: 0 0 12px;
+        font-size: 32px;
+        font-weight: 900;
+    }
+
+    .delete-warning p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+    }
+
+    .album-preview {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 32px;
+        padding: 20px;
+        border: 1px solid var(--line);
+        {% comment %} border-radius: 8px; {% endcomment %}
+        background: var(--panel);
+    }
+
+    .album-preview__image {
+        width: 120px;
+        height: 120px;
+        flex-shrink: 0;
+        {% comment %} border-radius: 6px; {% endcomment %}
+        overflow: hidden;
+    }
+
+    .album-preview__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .album-preview__info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .album-preview__info h2 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .album-preview__info .artist {
+        margin: 0 0 4px;
+        font-size: 14px;
+        color: var(--accent);
+        font-weight: 600;
+    }
+
+    .album-preview__info .meta {
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    .delete-warning__text {
+        background: var(--danger-10);
+        border: 1px solid var(--danger-20);
+        {% comment %} border-radius: 8px; {% endcomment %}
+        padding: 16px;
+        margin-bottom: 32px;
+    }
+
+    .delete-warning__text p {
+        margin: 0;
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.6;
+    }
+
+    .delete-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .delete-container {
+            padding: 24px;
+        }
+
+        .delete-warning h1 {
+            font-size: 24px;
+        }
+
+        .album-preview {
+            flex-direction: column;
+        }
+
+        .album-preview__image {
+            width: 100%;
+            height: 200px;
+        }
+
+        .delete-actions {
+            flex-direction: column;
+        }
+
+        .delete-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+{% endblock %}

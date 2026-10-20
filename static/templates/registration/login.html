@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{% endblock %}
+
+{% block content %}
+<div class="admin-login">
+
+    <h1>Music Catalogue Admin</h1>
+
+    <form class="form" method="POST">
+        {% csrf_token %}
+        <fieldset class="form__fieldset">
+
+        <div class="form__group">
+            <label for="id_username">Username</label>
+            {{ form.username }}
+        </div>
+
+        <div class="form__group">
+            <label for="id_password">Password</label>
+            {{ form.password }}
+        </div>
+
+        </fieldset>
+
+        {% comment %} <input type="hidden" name="next" value="{{ next }}"> {% endcomment %}
+
+        <div class="form__actions">
+            <button type="submit" class="button-55">
+                ✔
+            </button>
+        </div>
+        
+    </form>
+
+</div>
+{% endblock %}
