@@ -8,8 +8,12 @@ A modern music catalogue application for organising, browsing, and discovering m
 
 ## Tech Stack
 
-![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Django](https://img.shields.io/badge/Django-5.2-092E20?style=for-the-badge&logo=django&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Python](https://img.shields.io/badge/Python_3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django_5.2-092E20?style=for-the-badge&logo=django&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite_3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 
-![PythonAnywhere](https://img.shields.io/badge/Hosted%20on-PythonAnywhere-1D9FD7?style=for-the-badge)
+~✦~
+
+[![PythonAnywhere](https://img.shields.io/badge/Hosted%20on-PythonAnywhere-1D9FD7?style=for-the-badge)](https://musiccollectors.pythonanywhere.com/)
+
+</div>
